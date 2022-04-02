@@ -58,7 +58,7 @@ public class RegisterUserTest {
     private static class RegisterUser {
         private final UserRepository users;
         private final Emailer emailer;
-        private static final String format = "Welcome, %s! Let me explain at length how to get started using this service! ...";
+        private static final String welcomeMessage = "Welcome, %s! Let me explain at length how to get started using this service! ...";
 
         public RegisterUser(UserRepository users, Emailer emailer) {
             this.users = users;
@@ -76,7 +76,7 @@ public class RegisterUserTest {
                 return false;
             }
             users.save(new User(username, password, email));
-            emailer.send(email, "us@example.org", String.format(format, username));
+            emailer.send(email, "us@example.org", String.format(welcomeMessage, username));
             return true;
         }
     }
