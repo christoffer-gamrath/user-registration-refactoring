@@ -13,4 +13,8 @@ public class RegisterUserTest {
     private boolean registerUser() {
         return true;
     }
+
+    private static class Applesauce {
+
+    }
 }
