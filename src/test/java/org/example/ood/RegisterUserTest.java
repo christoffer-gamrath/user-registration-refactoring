@@ -9,11 +9,11 @@ public class RegisterUserTest {
 
     @Test
     void thatsNotActuallySuccess() {
-        assertEquals(false, registerUser.execute("username"));
+        assertEquals(false, registerUser.execute("username", "password"));
     }
 
     private static class RegisterUser {
-        public boolean execute(String username) {
+        public boolean execute(String username, String password) {
             return false;
         }
     }
