@@ -12,8 +12,16 @@ public class RegisterUserTest {
         assertEquals(true, registerUser.execute("username", "password"));
     }
 
+    @Test
+    void givenEmptyUsernameThenRegistrationFails() {
+        assertEquals(false, registerUser.execute("", "password"));
+    }
+
     private static class RegisterUser {
         public boolean execute(String username, String password) {
+            if ("".equals(username)) {
+                return false;
+            }
             return true;
         }
     }
