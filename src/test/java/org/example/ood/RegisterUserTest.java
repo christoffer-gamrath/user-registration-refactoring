@@ -41,7 +41,7 @@ public class RegisterUserTest {
 
     @Test
     void givenUserWithSameUsernameExistsThenRegistrationFails() {
-        users.save(new User("existinguser", "irrelevantPassword"));
+        users.save(new User("existinguser", "irrelevantPassword", "irrelevant@example.com"));
         assertEquals(false, registerUser.execute("existinguser", "securepassword", "user@example.com"));
     }
 
@@ -62,7 +62,7 @@ public class RegisterUserTest {
             if (password.length() < 14) {
                 return false;
             }
-            users.save(new User(username, password));
+            users.save(new User(username, password, email));
             return true;
         }
     }
@@ -81,6 +81,6 @@ public class RegisterUserTest {
         }
     }
 
-    public record User(String username, String password) {
+    public record User(String username, String password, String email) {
     }
 }
