@@ -29,6 +29,12 @@ public class RegisterUserTest {
         assertEquals(false, users.exists("username"));
     }
 
+    @Test
+    void givenUserWithSameUsernameExistsThenRegistrationFails() {
+        users.save(new User("existinguser"));
+        assertEquals(false, registerUser.execute("existinguser", "password"));
+    }
+
     private static class RegisterUser {
         private final UserRepository users;
 
@@ -38,6 +44,9 @@ public class RegisterUserTest {
 
         public boolean execute(String username, String password) {
             if ("".equals(username) || "".equals(password)) {
+                return false;
+            }
+            if (users.exists(username)) {
                 return false;
             }
             users.save(new User(username));
