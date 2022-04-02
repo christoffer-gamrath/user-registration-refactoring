@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RegisterUserTest {
     @Test
-    void registerUser() {
+    void registerUserReturnsTrueOnSuccess() {
         assertEquals(true, applesauce());
     }
 
