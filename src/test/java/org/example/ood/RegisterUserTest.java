@@ -2,7 +2,6 @@ package org.example.ood;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +40,7 @@ public class RegisterUserTest {
             if ("".equals(username) || "".equals(password)) {
                 return false;
             }
-            users.save(username);
+            users.save(new User(username));
             return true;
         }
     }
@@ -53,8 +52,11 @@ public class RegisterUserTest {
             return users.contains(username);
         }
 
-        void save(String username) {
-            users.add(username);
+        void save(User user) {
+            users.add(user.username());
         }
+    }
+
+    public record User(String username) {
     }
 }
