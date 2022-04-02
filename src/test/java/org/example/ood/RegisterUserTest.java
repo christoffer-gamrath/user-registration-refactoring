@@ -21,7 +21,7 @@ public class RegisterUserTest {
     @Test
     void givenValidUsernameAndPasswordThenTheUserIsRegisteredAndItSendsTheUserAWelcomeEmail() {
         context.checking(new Expectations() {{
-            oneOf(emailer).send("user@example.com", "us@example.org", "Welcome, user! Let me explain at length how to get started using this service! ...");
+            oneOf(emailer).send("user@example.com", "us@example.org", "Welcome, username! Let me explain at length how to get started using this service! ...");
         }});
         assertEquals(true, registerUser.execute("username", "securepassword", "user@example.com"));
         assertEquals(true, users.exists("username"));
@@ -75,7 +75,7 @@ public class RegisterUserTest {
                 return false;
             }
             users.save(new User(username, password, email));
-            emailer.send(email, "us@example.org", "Welcome, user! Let me explain at length how to get started using this service! ...");
+            emailer.send(email, "us@example.org", "Welcome, username! Let me explain at length how to get started using this service! ...");
             return true;
         }
     }
