@@ -75,7 +75,7 @@ public class RegisterUserTest {
                 return false;
             }
             users.save(new User(username, password, email));
-            emailer.send(email, "us@example.org", String.format("Welcome, username! Let me explain at length how to get started using this service! ..."));
+            emailer.send(email, "us@example.org", String.format("Welcome, %s! Let me explain at length how to get started using this service! ...", username));
             return true;
         }
     }
