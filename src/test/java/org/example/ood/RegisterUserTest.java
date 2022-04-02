@@ -5,14 +5,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RegisterUserTest {
-    private final Applesauce applesauce = new Applesauce();
+    private final RegisterUser registerUser = new RegisterUser();
 
     @Test
     void registerUserReturnsTrueOnSuccess() {
-        assertEquals(true, applesauce.registerUser());
+        assertEquals(true, registerUser.registerUser());
     }
 
-    private static class Applesauce {
+    private static class RegisterUser {
         public boolean registerUser() {
             return true;
         }
