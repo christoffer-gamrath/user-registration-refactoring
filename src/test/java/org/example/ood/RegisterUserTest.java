@@ -31,7 +31,7 @@ public class RegisterUserTest {
 
     @Test
     void givenUserWithSameUsernameExistsThenRegistrationFails() {
-        users.save(new User("existinguser"));
+        users.save(new User("existinguser", "irrelevantPassword"));
         assertEquals(false, registerUser.execute("existinguser", "password"));
     }
 
@@ -49,7 +49,7 @@ public class RegisterUserTest {
             if (users.exists(username)) {
                 return false;
             }
-            users.save(new User(username));
+            users.save(new User(username, password));
             return true;
         }
     }
@@ -58,7 +58,9 @@ public class RegisterUserTest {
         private final List<User> users = new ArrayList<>();
 
         boolean exists(String username) {
-            return users.contains(new User(username));
+            return users
+                .stream()
+                .anyMatch(u -> u.username.equals(username));
         }
 
         void save(User user) {
@@ -66,6 +68,6 @@ public class RegisterUserTest {
         }
     }
 
-    public record User(String username) {
+    public record User(String username, String password) {
     }
 }
