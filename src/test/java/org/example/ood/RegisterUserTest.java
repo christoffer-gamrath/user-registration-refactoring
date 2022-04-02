@@ -13,31 +13,31 @@ public class RegisterUserTest {
 
     @Test
     void givenValidUsernameAndPasswordThenTheUserIsRegistered() {
-        assertEquals(true, registerUser.execute("username", "securepassword"));
+        assertEquals(true, registerUser.execute("username", "securepassword", "user@example.com"));
         assertEquals(true, users.exists("username"));
     }
 
     @Test
     void givenEmptyUsernameThenRegistrationFails() {
-        assertEquals(false, registerUser.execute("", "securepassword"));
+        assertEquals(false, registerUser.execute("", "securepassword", "user@example.com"));
         assertEquals(false, users.exists("username"));
     }
 
     @Test
     void givenEmptyPasswordThenRegistrationFails() {
-        assertEquals(false, registerUser.execute("username", ""));
+        assertEquals(false, registerUser.execute("username", "", "user@example.com"));
         assertEquals(false, users.exists("username"));
     }
 
     @Test
     void givenTooShortPasswordThenRegistrationFails() {
-        assertEquals(false, registerUser.execute("username", "short"));
+        assertEquals(false, registerUser.execute("username", "short", "user@example.com"));
     }
 
     @Test
     void givenUserWithSameUsernameExistsThenRegistrationFails() {
         users.save(new User("existinguser", "irrelevantPassword"));
-        assertEquals(false, registerUser.execute("existinguser", "securepassword"));
+        assertEquals(false, registerUser.execute("existinguser", "securepassword", "user@example.com"));
     }
 
     private static class RegisterUser {
@@ -47,7 +47,7 @@ public class RegisterUserTest {
             this.users = users;
         }
 
-        public boolean execute(String username, String password) {
+        public boolean execute(String username, String password, String email) {
             if ("".equals(username) || "".equals(password)) {
                 return false;
             }
