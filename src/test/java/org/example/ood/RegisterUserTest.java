@@ -35,6 +35,11 @@ public class RegisterUserTest {
     }
 
     @Test
+    void givenEmptyEmailThenRegistrationFails() {
+        assertEquals(false, registerUser.execute("username", "securepassword", ""));
+    }
+
+    @Test
     void givenUserWithSameUsernameExistsThenRegistrationFails() {
         users.save(new User("existinguser", "irrelevantPassword"));
         assertEquals(false, registerUser.execute("existinguser", "securepassword", "user@example.com"));
@@ -48,7 +53,7 @@ public class RegisterUserTest {
         }
 
         public boolean execute(String username, String password, String email) {
-            if ("".equals(username) || "".equals(password)) {
+            if ("".equals(username) || "".equals(password) || "".equals(email)) {
                 return false;
             }
             if (users.exists(username)) {
