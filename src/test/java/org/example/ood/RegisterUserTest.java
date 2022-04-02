@@ -58,7 +58,7 @@ public class RegisterUserTest {
     private static class RegisterUser {
         private final UserRepository users;
         private final Emailer emailer;
-        private final String format = "Welcome, %s! Let me explain at length how to get started using this service! ...";
+        private static final String format = "Welcome, %s! Let me explain at length how to get started using this service! ...";
 
         public RegisterUser(UserRepository users, Emailer emailer) {
             this.users = users;
