@@ -13,13 +13,13 @@ public class RegisterUserTest {
 
     @Test
     void givenValidUsernameAndPasswordThenTheUserIsRegistered() {
-        assertEquals(true, registerUser.execute("username", "password"));
+        assertEquals(true, registerUser.execute("username", "securepassword"));
         assertEquals(true, users.exists("username"));
     }
 
     @Test
     void givenEmptyUsernameThenRegistrationFails() {
-        assertEquals(false, registerUser.execute("", "password"));
+        assertEquals(false, registerUser.execute("", "securepassword"));
         assertEquals(false, users.exists("username"));
     }
 
@@ -37,7 +37,7 @@ public class RegisterUserTest {
     @Test
     void givenUserWithSameUsernameExistsThenRegistrationFails() {
         users.save(new User("existinguser", "irrelevantPassword"));
-        assertEquals(false, registerUser.execute("existinguser", "password"));
+        assertEquals(false, registerUser.execute("existinguser", "securepassword"));
     }
 
     private static class RegisterUser {
@@ -54,7 +54,7 @@ public class RegisterUserTest {
             if (users.exists(username)) {
                 return false;
             }
-            if (password.length() < 8) {
+            if (password.length() < 14) {
                 return false;
             }
             users.save(new User(username, password));
