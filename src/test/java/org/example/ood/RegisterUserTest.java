@@ -1,6 +1,9 @@
 package org.example.ood;
 
+import org.jmock.Expectations;
+import org.jmock.junit5.JUnit5Mockery;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,11 +11,18 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RegisterUserTest {
+    @RegisterExtension
+    final JUnit5Mockery context = new JUnit5Mockery();
+
+    private final Emailer emailer = context.mock(Emailer.class);
     private final UserRepository users = new UserRepository();
-    private final RegisterUser registerUser = new RegisterUser(users);
+    private final RegisterUser registerUser = new RegisterUser(users, emailer);
 
     @Test
-    void givenValidUsernameAndPasswordThenTheUserIsRegistered() {
+    void givenValidUsernameAndPasswordThenTheUserIsRegisteredAndItSendsTheUserAWelcomeEmail() {
+        context.checking(new Expectations() {{
+            oneOf(emailer).send("user@example.com", "us@example.org", "Welcome, user! Let me explain at length how to get started using this service! ...");
+        }});
         assertEquals(true, registerUser.execute("username", "securepassword", "user@example.com"));
         assertEquals(true, users.exists("username"));
     }
@@ -47,9 +57,11 @@ public class RegisterUserTest {
 
     private static class RegisterUser {
         private final UserRepository users;
+        private final Emailer emailer;
 
-        public RegisterUser(UserRepository users) {
+        public RegisterUser(UserRepository users, Emailer emailer) {
             this.users = users;
+            this.emailer = emailer;
         }
 
         public boolean execute(String username, String password, String email) {
@@ -63,6 +75,7 @@ public class RegisterUserTest {
                 return false;
             }
             users.save(new User(username, password, email));
+            emailer.send(email, "us@example.org", "Welcome, user! Let me explain at length how to get started using this service! ...");
             return true;
         }
     }
@@ -82,5 +95,9 @@ public class RegisterUserTest {
     }
 
     public record User(String username, String password, String email) {
+    }
+
+    public interface Emailer {
+        void send(String to, String from, String message);
     }
 }
