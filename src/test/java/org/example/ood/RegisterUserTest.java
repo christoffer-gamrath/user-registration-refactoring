@@ -15,7 +15,7 @@ public class RegisterUserTest {
     final JUnit5Mockery context = new JUnit5Mockery();
 
     private final Emailer emailer = context.mock(Emailer.class);
-    private final UserRepository users = new UserRepository();
+    private final UserRepository users = new InMemoryUserRepository();
     private final RegisterUser registerUser = new RegisterUser(users, emailer);
 
     @Test
@@ -81,16 +81,24 @@ public class RegisterUserTest {
         }
     }
 
-    private static class UserRepository {
+    public interface UserRepository {
+        boolean exists(String username);
+
+        void save(RegisterUserTest.User user);
+    }
+
+    private static class InMemoryUserRepository implements UserRepository {
         private final List<User> users = new ArrayList<>();
 
-        boolean exists(String username) {
+        @Override
+        public boolean exists(String username) {
             return users
                 .stream()
                 .anyMatch(u -> u.username.equals(username));
         }
 
-        void save(User user) {
+        @Override
+        public void save(User user) {
             users.add(user);
         }
     }
