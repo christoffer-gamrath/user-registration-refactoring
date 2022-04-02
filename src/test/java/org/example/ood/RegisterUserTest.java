@@ -30,6 +30,11 @@ public class RegisterUserTest {
     }
 
     @Test
+    void givenTooShortPasswordThenRegistrationFails() {
+        assertEquals(false, registerUser.execute("username", "short"));
+    }
+
+    @Test
     void givenUserWithSameUsernameExistsThenRegistrationFails() {
         users.save(new User("existinguser", "irrelevantPassword"));
         assertEquals(false, registerUser.execute("existinguser", "password"));
@@ -47,6 +52,9 @@ public class RegisterUserTest {
                 return false;
             }
             if (users.exists(username)) {
+                return false;
+            }
+            if (password.length() < 8) {
                 return false;
             }
             users.save(new User(username, password));
