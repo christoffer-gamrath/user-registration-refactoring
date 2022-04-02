@@ -9,14 +9,12 @@ public class RegisterUserTest {
 
     @Test
     void registerUserReturnsTrueOnSuccess() {
-        assertEquals(true, registerUser());
-    }
-
-    private boolean registerUser() {
-        return true;
+        assertEquals(true, applesauce.registerUser());
     }
 
     private static class Applesauce {
-
+        public boolean registerUser() {
+            return true;
+        }
     }
 }
