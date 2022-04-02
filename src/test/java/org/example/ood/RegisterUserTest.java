@@ -9,11 +9,11 @@ public class RegisterUserTest {
 
     @Test
     void registerUserReturnsTrueOnSuccess() {
-        assertEquals(true, registerUser.registerUser());
+        assertEquals(true, registerUser.execute());
     }
 
     private static class RegisterUser {
-        public boolean registerUser() {
+        public boolean execute() {
             return true;
         }
     }
