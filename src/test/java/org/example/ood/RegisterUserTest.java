@@ -8,13 +8,13 @@ public class RegisterUserTest {
     private final RegisterUser registerUser = new RegisterUser();
 
     @Test
-    void registerUserReturnsTrueOnSuccess() {
-        assertEquals(true, registerUser.execute());
+    void thatsNotActuallySuccess() {
+        assertEquals(false, registerUser.execute());
     }
 
     private static class RegisterUser {
         public boolean execute() {
-            return true;
+            return false;
         }
     }
 }
