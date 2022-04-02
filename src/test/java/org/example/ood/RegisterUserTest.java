@@ -46,14 +46,14 @@ public class RegisterUserTest {
     }
 
     private static class UserRepository {
-        private final List<String> users = new ArrayList<>();
+        private final List<User> users = new ArrayList<>();
 
         boolean exists(String username) {
-            return users.contains(username);
+            return users.contains(new User(username));
         }
 
         void save(User user) {
-            users.add(user.username());
+            users.add(user);
         }
     }
 
