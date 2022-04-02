@@ -21,11 +21,13 @@ public class RegisterUserTest {
     @Test
     void givenEmptyUsernameThenRegistrationFails() {
         assertEquals(false, registerUser.execute("", "password"));
+        assertEquals(false, users.exists("username"));
     }
 
     @Test
     void givenEmptyPasswordThenRegistrationFails() {
         assertEquals(false, registerUser.execute("username", ""));
+        assertEquals(false, users.exists("username"));
     }
 
     private static class RegisterUser {
