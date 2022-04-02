@@ -102,22 +102,6 @@ public class RegisterUserTest {
         void save(RegisterUserTest.User user);
     }
 
-    private static class InMemoryUserRepository implements UserRepository {
-        private final List<User> users = new ArrayList<>();
-
-        @Override
-        public boolean exists(String username) {
-            return users
-                .stream()
-                .anyMatch(u -> u.username.equals(username));
-        }
-
-        @Override
-        public void save(User user) {
-            users.add(user);
-        }
-    }
-
     public record User(String username, String password, String email) {
     }
 
