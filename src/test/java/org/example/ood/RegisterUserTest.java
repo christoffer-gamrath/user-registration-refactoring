@@ -113,25 +113,13 @@ public class RegisterUserTest {
         }
 
         public void execute(String username, String password, String email) {
-            if (!isValid(username, password, email)) {
+            if (!validator.isValid(username, password, email)) {
                 listener.onFailure();
                 return;
             }
             final var user = new User(username, password, email);
             users.save(user);
             listener.onSuccess(user);
-        }
-
-        private boolean isValid(String username, String password, String email) {
-            var valid = true;
-            if ("".equals(username) || "".equals(password) || "".equals(email)) {
-                valid = false;
-            } else if (users.exists(username)) {
-                valid = false;
-            } else if (password.length() < 14) {
-                valid = false;
-            }
-            return valid;
         }
 
         public interface Listener {
@@ -146,6 +134,18 @@ public class RegisterUserTest {
 
         public UserValidator(UserRepository users) {
             this.users = users;
+        }
+
+        public boolean isValid(String username, String password, String email) {
+            var valid = true;
+            if ("".equals(username) || "".equals(password) || "".equals(email)) {
+                valid = false;
+            } else if (users.exists(username)) {
+                valid = false;
+            } else if (password.length() < 14) {
+                valid = false;
+            }
+            return valid;
         }
     }
 
