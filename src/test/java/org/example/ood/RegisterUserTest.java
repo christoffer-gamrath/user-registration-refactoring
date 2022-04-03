@@ -19,7 +19,7 @@ public class RegisterUserTest {
     private final Emailer emailer = context.mock(Emailer.class);
     private final UserRepository users = context.mock(UserRepository.class);
     private final RegisterUser.Listener listener = context.mock(RegisterUser.Listener.class);
-    private final RegisterUser registerUser = new RegisterUser(users, listener);
+    private final RegisterUser registerUser = new RegisterUser(users, listener, new UserValidator(users));
 
     @Test
     void givenValidUsernameAndPasswordThenTheUserIsRegisteredAndItSendsTheUserAWelcomeEmail() {
@@ -152,10 +152,10 @@ public class RegisterUserTest {
         private final Listener listener;
         private final UserValidator validator;
 
-        public RegisterUser(UserRepository users, Listener listener) {
+        public RegisterUser(UserRepository users, Listener listener, UserValidator validator) {
             this.users = users;
             this.listener = listener;
-            this.validator = new UserValidator(users);
+            this.validator = validator;
         }
 
         public void execute(String username, String password, String email) {
