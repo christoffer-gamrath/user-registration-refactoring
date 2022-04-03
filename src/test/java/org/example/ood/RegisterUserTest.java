@@ -29,15 +29,6 @@ public class RegisterUserTest {
     }
 
     @Test
-    void sendWelcomeEmailOnSuccessfulRegistration() {
-        context.checking(new Expectations() {{
-            oneOf(emailer).send("user@example.com", "us@example.org", "Welcome, username! Let me explain at length how to get started using this service! ...");
-        }});
-        final var welcomeEmailer = new SendWelcomeEmailOnSuccessfulRegistration(emailer);
-        welcomeEmailer.onSuccess(new User("username", "", "user@example.com"));
-    }
-
-    @Test
     void registrationFailsIfValidationFails() {
         context.checking(new Expectations() {{
             allowing(userValidator).isValid("a", "b", "c"); will(returnValue(false));
