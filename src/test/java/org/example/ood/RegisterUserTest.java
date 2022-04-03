@@ -79,7 +79,6 @@ public class RegisterUserTest {
         private final Emailer emailer;
         private final Listener listener;
         private final SendWelcomeEmailOnSuccessfulRegistration welcomeEmailer;
-        private static final String welcomeMessage = "Welcome, %s! Let me explain at length how to get started using this service! ...";
 
         public RegisterUser(UserRepository users, Emailer emailer, Listener listener) {
             this.users = users;
@@ -114,6 +113,7 @@ public class RegisterUserTest {
 
 
     private static class SendWelcomeEmailOnSuccessfulRegistration {
+        private static final String welcomeMessage = "Welcome, %s! Let me explain at length how to get started using this service! ...";
         private final Emailer emailer;
 
         public SendWelcomeEmailOnSuccessfulRegistration(Emailer emailer) {
@@ -121,7 +121,7 @@ public class RegisterUserTest {
         }
 
         public void sendWelcomeEmail(String username, String email) {
-            emailer.send(email, "us@example.org", String.format(RegisterUser.welcomeMessage, username));
+            emailer.send(email, "us@example.org", String.format(welcomeMessage, username));
         }
     }
 
