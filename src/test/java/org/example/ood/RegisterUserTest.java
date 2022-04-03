@@ -18,7 +18,7 @@ public class RegisterUserTest {
     private final Emailer emailer = context.mock(Emailer.class);
     private final UserRepository users = context.mock(UserRepository.class);
     private final RegisterUser.Listener listener = context.mock(RegisterUser.Listener.class);
-    private final RegisterUser registerUser = new RegisterUser(users, listener, new SendWelcomeEmailOnSuccessfulRegistration(emailer));
+    private final RegisterUser registerUser = new RegisterUser(users, new CompositeRegisterUserListener(listener, new SendWelcomeEmailOnSuccessfulRegistration(emailer)));
 
     @Test
     void givenValidUsernameAndPasswordThenTheUserIsRegisteredAndItSendsTheUserAWelcomeEmail() {
@@ -111,12 +111,10 @@ public class RegisterUserTest {
     private static class RegisterUser {
         private final UserRepository users;
         private final Listener listener;
-        private final SendWelcomeEmailOnSuccessfulRegistration welcomeEmailer;
 
-        public RegisterUser(UserRepository users, Listener listener, SendWelcomeEmailOnSuccessfulRegistration welcomeEmailer) {
+        public RegisterUser(UserRepository users, Listener listener) {
             this.users = users;
             this.listener = listener;
-            this.welcomeEmailer = welcomeEmailer;
         }
 
         public void execute(String username, String password, String email) {
@@ -134,7 +132,6 @@ public class RegisterUserTest {
             }
             final var user = new User(username, password, email);
             users.save(user);
-            welcomeEmailer.onSuccess(user);
             listener.onSuccess(user);
         }
 
