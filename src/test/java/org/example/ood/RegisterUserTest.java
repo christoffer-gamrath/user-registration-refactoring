@@ -34,7 +34,7 @@ public class RegisterUserTest {
             oneOf(emailer).send("user@example.com", "us@example.org", "Welcome, username! Let me explain at length how to get started using this service! ...");
         }});
         final var welcomeEmailer = new SendWelcomeEmailOnSuccessfulRegistration(emailer);
-        welcomeEmailer.sendWelcomeEmail(new User("username", "", "user@example.com"));
+        welcomeEmailer.onSuccess(new User("username", "", "user@example.com"));
     }
 
     @Test
