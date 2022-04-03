@@ -98,7 +98,8 @@ public class RegisterUserTest {
                 listener.onFailure();
                 return;
             }
-            users.save(new User(username, password, email));
+            final var user = new User(username, password, email);
+            users.save(user);
             welcomeEmailer.sendWelcomeEmail(username, email);
             listener.onSuccess();
         }
