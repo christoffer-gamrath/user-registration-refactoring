@@ -156,10 +156,6 @@ public class RegisterUserTest {
         }
     }
 
-    public interface Emailer {
-        void send(String to, String from, String message);
-    }
-
     private static class CompositeRegisterUserListener implements RegisterUser.Listener {
         private final List<RegisterUser.Listener> listeners = new ArrayList<>();
 
