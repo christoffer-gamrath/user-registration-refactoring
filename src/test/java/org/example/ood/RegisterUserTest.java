@@ -31,7 +31,6 @@ public class RegisterUserTest {
             allowing(users).exists("username"); will(returnValue(false));
         }});
         assertEquals(false, registerUser.execute("", "securepassword", "user@example.com"));
-        assertEquals(false, users.exists("username"));
     }
 
     @Test
@@ -40,7 +39,6 @@ public class RegisterUserTest {
             allowing(users).exists("username"); will(returnValue(false));
         }});
         assertEquals(false, registerUser.execute("username", "", "user@example.com"));
-        assertEquals(false, users.exists("username"));
     }
 
     @Test
