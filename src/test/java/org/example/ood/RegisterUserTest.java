@@ -102,12 +102,8 @@ public class RegisterUserTest {
                 return;
             }
             users.save(new User(username, password, email));
-            sendWelcomeEmail(username, email);
+            welcomeEmailer.sendWelcomeEmail(username, email, this);
             listener.onSuccess();
-        }
-
-        private void sendWelcomeEmail(String username, String email) {
-            emailer.send(email, "us@example.org", String.format(welcomeMessage, username));
         }
 
         public interface Listener {
@@ -122,6 +118,10 @@ public class RegisterUserTest {
 
         public SendWelcomeEmailOnSuccessfulRegistration(Emailer emailer) {
             this.emailer = emailer;
+        }
+
+        public void sendWelcomeEmail(String username, String email, RegisterUser registerUser) {
+            registerUser.emailer.send(email, "us@example.org", String.format(RegisterUser.welcomeMessage, username));
         }
     }
 
