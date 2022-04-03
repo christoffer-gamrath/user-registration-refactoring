@@ -29,7 +29,7 @@ public class RegisterUserTest {
     }
 
     @Test
-    void sendWelcomeEmail() {
+    void sendWelcomeEmailOnSuccessfulRegistration() {
         context.checking(new Expectations() {{
             oneOf(emailer).send("user@example.com", "us@example.org", "Welcome, username! Let me explain at length how to get started using this service! ...");
         }});
