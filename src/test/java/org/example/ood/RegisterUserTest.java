@@ -137,15 +137,14 @@ public class RegisterUserTest {
         }
 
         public boolean isValid(String username, String password, String email) {
-            var valid = true;
             if ("".equals(username) || "".equals(password) || "".equals(email)) {
-                valid = false;
+                return false;
             } else if (users.exists(username)) {
-                valid = false;
+                return false;
             } else if (password.length() < 14) {
-                valid = false;
+                return false;
             }
-            return valid;
+            return true;
         }
     }
 
