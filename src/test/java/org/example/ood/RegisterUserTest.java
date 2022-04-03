@@ -11,7 +11,6 @@ public class RegisterUserTest {
     @RegisterExtension
     final JUnit5Mockery context = new JUnit5Mockery();
 
-    private final Emailer emailer = context.mock(Emailer.class);
     private final UserRepository users = context.mock(UserRepository.class);
     private final RegisterUser.Listener listener = context.mock(RegisterUser.Listener.class);
     private final UserValidator userValidator = context.mock(UserValidator.class);
