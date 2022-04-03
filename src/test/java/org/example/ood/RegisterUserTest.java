@@ -101,7 +101,7 @@ public class RegisterUserTest {
             }
             final var user = new User(username, password, email);
             users.save(user);
-            welcomeEmailer.sendWelcomeEmail(username, email, user);
+            welcomeEmailer.sendWelcomeEmail(username, user);
             listener.onSuccess(user);
         }
 
@@ -120,7 +120,7 @@ public class RegisterUserTest {
             this.emailer = emailer;
         }
 
-        public void sendWelcomeEmail(String username, String email, User user) {
+        public void sendWelcomeEmail(String username, User user) {
             emailer.send(user.email, "us@example.org", String.format(welcomeMessage, username));
         }
     }
