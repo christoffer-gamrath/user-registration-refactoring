@@ -93,7 +93,4 @@ public class RegisterUserTest {
         }
     }
 
-    public interface Emailer {
-        void send(String to, String from, String message);
-    }
 }
