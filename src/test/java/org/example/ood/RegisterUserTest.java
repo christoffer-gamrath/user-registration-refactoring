@@ -18,7 +18,7 @@ public class RegisterUserTest {
     private final Emailer emailer = context.mock(Emailer.class);
     private final UserRepository users = context.mock(UserRepository.class);
     private final RegisterUser.Listener listener = context.mock(RegisterUser.Listener.class);
-    private final RegisterUser registerUser = new RegisterUser(users, new CompositeRegisterUserListener(listener, new SendWelcomeEmailOnSuccessfulRegistration(emailer)));
+    private final RegisterUser registerUser = new RegisterUser(users, listener);
 
     @Test
     void givenValidUsernameAndPasswordThenTheUserIsRegisteredAndItSendsTheUserAWelcomeEmail() {
@@ -27,7 +27,6 @@ public class RegisterUserTest {
             will(returnValue(false));
             final var user = new User("username", "securepassword", "user@example.com");
             oneOf(users).save(user);
-            oneOf(emailer).send("user@example.com", "us@example.org", "Welcome, username! Let me explain at length how to get started using this service! ...");
             oneOf(listener).onSuccess(user);
         }});
         registerUser.execute("username", "securepassword", "user@example.com");
