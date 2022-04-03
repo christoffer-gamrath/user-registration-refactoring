@@ -24,7 +24,7 @@ public class RegisterUserTest {
             oneOf(emailer).send("user@example.com", "us@example.org", "Welcome, username! Let me explain at length how to get started using this service! ...");
             oneOf(listener).onSuccess();
         }});
-        assertEquals(true, registerUser.execute("username", "securepassword", "user@example.com"));
+        registerUser.execute("username", "securepassword", "user@example.com");
     }
 
     @Test
@@ -33,7 +33,7 @@ public class RegisterUserTest {
             allowing(users).exists("username"); will(returnValue(false));
             oneOf(listener).onFailure();
         }});
-        assertEquals(false, registerUser.execute("", "securepassword", "user@example.com"));
+        registerUser.execute("", "securepassword", "user@example.com");
         assertEquals(false, users.exists("username"));
     }
 
@@ -43,7 +43,7 @@ public class RegisterUserTest {
             allowing(users).exists("username"); will(returnValue(false));
             oneOf(listener).onFailure();
         }});
-        assertEquals(false, registerUser.execute("username", "", "user@example.com"));
+        registerUser.execute("username", "", "user@example.com");
         assertEquals(false, users.exists("username"));
     }
 
@@ -53,7 +53,7 @@ public class RegisterUserTest {
             allowing(users).exists("username"); will(returnValue(false));
             oneOf(listener).onFailure();
         }});
-        assertEquals(false, registerUser.execute("username", "short", "user@example.com"));
+         registerUser.execute("username", "short", "user@example.com");
     }
 
     @Test
@@ -62,7 +62,7 @@ public class RegisterUserTest {
             allowing(users).exists("username"); will(returnValue(false));
             oneOf(listener).onFailure();
         }});
-        assertEquals(false, registerUser.execute("username", "securepassword", ""));
+         registerUser.execute("username", "securepassword", "");
     }
 
     @Test
@@ -71,7 +71,7 @@ public class RegisterUserTest {
             allowing(users).exists("existinguser"); will(returnValue(true));
             oneOf(listener).onFailure();
         }});
-        assertEquals(false, registerUser.execute("existinguser", "securepassword", "user@example.com"));
+        registerUser.execute("existinguser", "securepassword", "user@example.com");
     }
 
     private static class RegisterUser {
@@ -86,23 +86,22 @@ public class RegisterUserTest {
             this.listener = listener;
         }
 
-        public boolean execute(String username, String password, String email) {
+        public void execute(String username, String password, String email) {
             if ("".equals(username) || "".equals(password) || "".equals(email)) {
                 listener.onFailure();
-                return false;
+                return;
             }
             if (users.exists(username)) {
                 listener.onFailure();
-                return false;
+                return;
             }
             if (password.length() < 14) {
                 listener.onFailure();
-                return false;
+                return;
             }
             users.save(new User(username, password, email));
             emailer.send(email, "us@example.org", String.format(welcomeMessage, username));
             listener.onSuccess();
-            return true;
         }
 
         public interface Listener {
