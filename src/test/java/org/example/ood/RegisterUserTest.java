@@ -20,9 +20,10 @@ public class RegisterUserTest {
     void givenValidUsernameAndPasswordThenTheUserIsRegisteredAndItSendsTheUserAWelcomeEmail() {
         context.checking(new Expectations() {{
             allowing(users).exists("username"); will(returnValue(false));
-            oneOf(users).save(new User("username", "securepassword", "user@example.com"));
+            final var user = new User("username", "securepassword", "user@example.com");
+            oneOf(users).save(user);
             oneOf(emailer).send("user@example.com", "us@example.org", "Welcome, username! Let me explain at length how to get started using this service! ...");
-            oneOf(listener).onSuccess();
+            oneOf(listener).onSuccess(user);
         }});
         registerUser.execute("username", "securepassword", "user@example.com");
     }
@@ -101,11 +102,11 @@ public class RegisterUserTest {
             final var user = new User(username, password, email);
             users.save(user);
             welcomeEmailer.sendWelcomeEmail(username, email);
-            listener.onSuccess();
+            listener.onSuccess(user);
         }
 
         public interface Listener {
-            void onSuccess();
+            void onSuccess(User user);
             void onFailure();
         }
     }
