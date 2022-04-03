@@ -19,12 +19,14 @@ public class RegisterUserTest {
     private final Emailer emailer = context.mock(Emailer.class);
     private final UserRepository users = context.mock(UserRepository.class);
     private final RegisterUser.Listener listener = context.mock(RegisterUser.Listener.class);
-    private final RegisterUser registerUser = new RegisterUser(users, listener, new UserValidatorImpl(users));
+    private final UserValidator userValidator = context.mock(UserValidator.class);
+    private final RegisterUser registerUser = new RegisterUser(users, listener, userValidator);
 
     @Test
     void givenValidUsernameAndPasswordThenTheUserIsRegisteredAndItSendsTheUserAWelcomeEmail() {
         context.checking(new Expectations() {{
             allowing(users).exists("username"); will(returnValue(false));
+            allowing(userValidator).isValid("username", "securepassword", "user@example.com"); will(returnValue(true));
             final var user = new User("username", "securepassword", "user@example.com");
             oneOf(users).save(user);
             oneOf(listener).onSuccess(user);
@@ -42,13 +44,12 @@ public class RegisterUserTest {
     }
 
     @Test
-    void givenEmptyUsernameThenRegistrationFails() {
+    void registrationFailsIfValidationFails() {
         context.checking(new Expectations() {{
-            allowing(users).exists("username"); will(returnValue(false));
+            allowing(userValidator).isValid("a", "b", "c"); will(returnValue(false));
             oneOf(listener).onFailure();
         }});
-        registerUser.execute("", "securepassword", "user@example.com");
-        assertEquals(false, users.exists("username"));
+        registerUser.execute("a", "b", "c");
     }
 
     @Test
@@ -61,31 +62,12 @@ public class RegisterUserTest {
     }
 
     @Test
-    void givenEmptyPasswordThenRegistrationFails() {
-        context.checking(new Expectations() {{
-            allowing(users).exists("username"); will(returnValue(false));
-            oneOf(listener).onFailure();
-        }});
-        registerUser.execute("username", "", "user@example.com");
-        assertEquals(false, users.exists("username"));
-    }
-
-    @Test
     void emptyPasswordIsInvalid() {
         context.checking(new Expectations() {{
             allowing(users).exists("username"); will(returnValue(false));
         }});
         final var userValidator = new UserValidatorImpl(users);
         assertFalse(userValidator.isValid("username", "", "user@example.com"));
-    }
-
-    @Test
-    void givenTooShortPasswordThenRegistrationFails() {
-        context.checking(new Expectations() {{
-            allowing(users).exists("username"); will(returnValue(false));
-            oneOf(listener).onFailure();
-        }});
-        registerUser.execute("username", "short", "user@example.com");
     }
 
     @Test
@@ -98,30 +80,12 @@ public class RegisterUserTest {
     }
 
     @Test
-    void givenEmptyEmailThenRegistrationFails() {
-        context.checking(new Expectations() {{
-            allowing(users).exists("username"); will(returnValue(false));
-            oneOf(listener).onFailure();
-        }});
-        registerUser.execute("username", "securepassword", "");
-    }
-
-    @Test
     void emptyEmailIsInvalid() {
         context.checking(new Expectations() {{
             allowing(users).exists("username"); will(returnValue(false));
         }});
         final var userValidator = new UserValidatorImpl(users);
         assertFalse(userValidator.isValid("username", "securepassword", ""));
-    }
-
-    @Test
-    void givenUserWithSameUsernameExistsThenRegistrationFails() {
-        context.checking(new Expectations() {{
-            allowing(users).exists("existinguser"); will(returnValue(true));
-            oneOf(listener).onFailure();
-        }});
-        registerUser.execute("existinguser", "securepassword", "user@example.com");
     }
 
     @Test
