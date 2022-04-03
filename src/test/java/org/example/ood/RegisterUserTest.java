@@ -19,7 +19,7 @@ public class RegisterUserTest {
     private final Emailer emailer = context.mock(Emailer.class);
     private final UserRepository users = context.mock(UserRepository.class);
     private final RegisterUser.Listener listener = context.mock(RegisterUser.Listener.class);
-    private final RegisterUser registerUser = new RegisterUser(users, listener, new UserValidator(users));
+    private final RegisterUser registerUser = new RegisterUser(users, listener, new UserValidatorImpl(users));
 
     @Test
     void givenValidUsernameAndPasswordThenTheUserIsRegisteredAndItSendsTheUserAWelcomeEmail() {
@@ -56,7 +56,7 @@ public class RegisterUserTest {
         context.checking(new Expectations() {{
             allowing(users).exists("username"); will(returnValue(false));
         }});
-        final var userValidator = new UserValidator(users);
+        final var userValidator = new UserValidatorImpl(users);
         assertFalse(userValidator.isValid("", "securepassword", "user@example.com"));
     }
 
@@ -75,7 +75,7 @@ public class RegisterUserTest {
         context.checking(new Expectations() {{
             allowing(users).exists("username"); will(returnValue(false));
         }});
-        final var userValidator = new UserValidator(users);
+        final var userValidator = new UserValidatorImpl(users);
         assertFalse(userValidator.isValid("username", "", "user@example.com"));
     }
 
@@ -93,7 +93,7 @@ public class RegisterUserTest {
         context.checking(new Expectations() {{
             allowing(users).exists("username"); will(returnValue(false));
         }});
-        final var userValidator = new UserValidator(users);
+        final var userValidator = new UserValidatorImpl(users);
         assertFalse(userValidator.isValid("username", "short", "user@example.com"));
     }
 
@@ -111,7 +111,7 @@ public class RegisterUserTest {
         context.checking(new Expectations() {{
             allowing(users).exists("username"); will(returnValue(false));
         }});
-        final var userValidator = new UserValidator(users);
+        final var userValidator = new UserValidatorImpl(users);
         assertFalse(userValidator.isValid("username", "securepassword", ""));
     }
 
@@ -129,7 +129,7 @@ public class RegisterUserTest {
         context.checking(new Expectations() {{
             allowing(users).exists("existinguser"); will(returnValue(true));
         }});
-        final var userValidator = new UserValidator(users);
+        final var userValidator = new UserValidatorImpl(users);
         assertFalse(userValidator.isValid("existinguser", "securepassword", "user@example.com"));
     }
 
@@ -175,13 +175,18 @@ public class RegisterUserTest {
         }
     }
 
-    private static class UserValidator {
+    public interface UserValidator {
+        boolean isValid(String username, String password, String email);
+    }
+
+    private static class UserValidatorImpl implements UserValidator {
         private final UserRepository users;
 
-        public UserValidator(UserRepository users) {
+        public UserValidatorImpl(UserRepository users) {
             this.users = users;
         }
 
+        @Override
         public boolean isValid(String username, String password, String email) {
             if ("".equals(username) || "".equals(password) || "".equals(email)) {
                 return false;
