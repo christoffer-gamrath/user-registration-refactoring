@@ -15,7 +15,7 @@ public class RegisterUserTest {
     private final RegisterUser registerUser = new RegisterUser(users, listener, userValidator);
 
     @Test
-    void givenValidUserThenTheUserIsRegisteredAndItSendsTheUserAWelcomeEmail() {
+    void givenValidUserThenTheUserIsRegistered() {
         context.checking(new Expectations() {{
             allowing(userValidator).isValid("username", "securepassword", "user@example.com"); will(returnValue(true));
             final var user = new User("username", "securepassword", "user@example.com");
