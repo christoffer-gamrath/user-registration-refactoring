@@ -29,6 +29,15 @@ public class RegisterUserTest {
     }
 
     @Test
+    void sendWelcomeEmail() {
+        context.checking(new Expectations() {{
+            oneOf(emailer).send("user@example.com", "us@example.org", "Welcome, username! Let me explain at length how to get started using this service! ...");
+        }});
+        final var welcomeEmailer = new SendWelcomeEmailOnSuccessfulRegistration(emailer);
+        welcomeEmailer.sendWelcomeEmail(new User("username", "", "user@example.com"));
+    }
+
+    @Test
     void givenEmptyUsernameThenRegistrationFails() {
         context.checking(new Expectations() {{
             allowing(users).exists("username"); will(returnValue(false));
