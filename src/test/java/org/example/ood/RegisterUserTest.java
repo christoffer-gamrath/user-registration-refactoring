@@ -13,7 +13,8 @@ public class RegisterUserTest {
 
     private final Emailer emailer = context.mock(Emailer.class);
     private final UserRepository users = context.mock(UserRepository.class);
-    private final RegisterUser registerUser = new RegisterUser(users, emailer);
+    private final RegisterUser.Listener listener = context.mock(RegisterUser.Listener.class);
+    private final RegisterUser registerUser = new RegisterUser(users, emailer, listener);
 
     @Test
     void givenValidUsernameAndPasswordThenTheUserIsRegisteredAndItSendsTheUserAWelcomeEmail() {
@@ -70,11 +71,13 @@ public class RegisterUserTest {
     private static class RegisterUser {
         private final UserRepository users;
         private final Emailer emailer;
+        private final Listener listener;
         private static final String welcomeMessage = "Welcome, %s! Let me explain at length how to get started using this service! ...";
 
-        public RegisterUser(UserRepository users, Emailer emailer) {
+        public RegisterUser(UserRepository users, Emailer emailer, Listener listener) {
             this.users = users;
             this.emailer = emailer;
+            this.listener = listener;
         }
 
         public boolean execute(String username, String password, String email) {
@@ -90,6 +93,10 @@ public class RegisterUserTest {
             users.save(new User(username, password, email));
             emailer.send(email, "us@example.org", String.format(welcomeMessage, username));
             return true;
+        }
+
+        public interface Listener {
+            void onSuccess();
         }
     }
 
