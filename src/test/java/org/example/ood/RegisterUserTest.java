@@ -23,8 +23,7 @@ public class RegisterUserTest {
     @Test
     void givenValidUsernameAndPasswordThenTheUserIsRegisteredAndItSendsTheUserAWelcomeEmail() {
         context.checking(new Expectations() {{
-            allowing(users).exists("username");
-            will(returnValue(false));
+            allowing(users).exists("username"); will(returnValue(false));
             final var user = new User("username", "securepassword", "user@example.com");
             oneOf(users).save(user);
             oneOf(listener).onSuccess(user);
@@ -44,8 +43,7 @@ public class RegisterUserTest {
     @Test
     void givenEmptyUsernameThenRegistrationFails() {
         context.checking(new Expectations() {{
-            allowing(users).exists("username");
-            will(returnValue(false));
+            allowing(users).exists("username"); will(returnValue(false));
             oneOf(listener).onFailure();
         }});
         registerUser.execute("", "securepassword", "user@example.com");
@@ -55,8 +53,7 @@ public class RegisterUserTest {
     @Test
     void givenEmptyPasswordThenRegistrationFails() {
         context.checking(new Expectations() {{
-            allowing(users).exists("username");
-            will(returnValue(false));
+            allowing(users).exists("username"); will(returnValue(false));
             oneOf(listener).onFailure();
         }});
         registerUser.execute("username", "", "user@example.com");
@@ -66,8 +63,7 @@ public class RegisterUserTest {
     @Test
     void givenTooShortPasswordThenRegistrationFails() {
         context.checking(new Expectations() {{
-            allowing(users).exists("username");
-            will(returnValue(false));
+            allowing(users).exists("username"); will(returnValue(false));
             oneOf(listener).onFailure();
         }});
         registerUser.execute("username", "short", "user@example.com");
@@ -76,8 +72,7 @@ public class RegisterUserTest {
     @Test
     void givenEmptyEmailThenRegistrationFails() {
         context.checking(new Expectations() {{
-            allowing(users).exists("username");
-            will(returnValue(false));
+            allowing(users).exists("username"); will(returnValue(false));
             oneOf(listener).onFailure();
         }});
         registerUser.execute("username", "securepassword", "");
@@ -86,8 +81,7 @@ public class RegisterUserTest {
     @Test
     void givenUserWithSameUsernameExistsThenRegistrationFails() {
         context.checking(new Expectations() {{
-            allowing(users).exists("existinguser");
-            will(returnValue(true));
+            allowing(users).exists("existinguser"); will(returnValue(true));
             oneOf(listener).onFailure();
         }});
         registerUser.execute("existinguser", "securepassword", "user@example.com");
