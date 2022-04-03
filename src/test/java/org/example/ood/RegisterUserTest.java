@@ -129,7 +129,7 @@ public class RegisterUserTest {
             this.emailer = emailer;
         }
 
-        public void sendWelcomeEmail(User user) {
+        private void sendWelcomeEmail(User user) {
             emailer.send(user.email, "us@example.org", String.format(welcomeMessage, user.username));
         }
 
