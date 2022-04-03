@@ -111,8 +111,7 @@ public class RegisterUserTest {
         }
 
         public void execute(String username, String password, String email) {
-            boolean valid = isValid(username, password, email);
-            if (!valid) {
+            if (!isValid(username, password, email)) {
                 listener.onFailure();
                 return;
             }
