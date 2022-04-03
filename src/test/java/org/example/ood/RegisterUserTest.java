@@ -106,10 +106,6 @@ public class RegisterUserTest {
         composite.onSuccess(expectedUser);
     }
 
-    public interface UserValidator {
-        boolean isValid(String username, String password, String email);
-    }
-
     private static class UserValidatorImpl implements UserValidator {
         private final UserRepository users;
 

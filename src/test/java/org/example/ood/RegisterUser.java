@@ -3,9 +3,9 @@ package org.example.ood;
 class RegisterUser {
     private final UserRepository users;
     private final Listener listener;
-    private final RegisterUserTest.UserValidator validator;
+    private final UserValidator validator;
 
-    public RegisterUser(UserRepository users, Listener listener, RegisterUserTest.UserValidator validator) {
+    public RegisterUser(UserRepository users, Listener listener, UserValidator validator) {
         this.users = users;
         this.listener = listener;
         this.validator = validator;
