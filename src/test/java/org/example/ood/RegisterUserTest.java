@@ -5,10 +5,6 @@ import org.jmock.junit5.JUnit5Mockery;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -153,24 +149,6 @@ public class RegisterUserTest {
 
         @Override
         public void onFailure() {
-        }
-    }
-
-    private static class CompositeRegisterUserListener implements RegisterUser.Listener {
-        private final List<RegisterUser.Listener> listeners = new ArrayList<>();
-
-        public CompositeRegisterUserListener(RegisterUser.Listener... listeners) {
-            this.listeners.addAll(Arrays.asList(listeners));
-        }
-
-        @Override
-        public void onSuccess(User user) {
-            listeners.forEach(l -> l.onSuccess(user));
-        }
-
-        @Override
-        public void onFailure() {
-            listeners.forEach(RegisterUser.Listener::onFailure);
         }
     }
 }
