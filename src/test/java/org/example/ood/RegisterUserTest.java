@@ -78,12 +78,14 @@ public class RegisterUserTest {
         private final UserRepository users;
         private final Emailer emailer;
         private final Listener listener;
+        private final SendWelcomeEmailOnSuccessfulRegistration welcomeEmailer;
         private static final String welcomeMessage = "Welcome, %s! Let me explain at length how to get started using this service! ...";
 
         public RegisterUser(UserRepository users, Emailer emailer, Listener listener) {
             this.users = users;
             this.emailer = emailer;
             this.listener = listener;
+            this.welcomeEmailer = new SendWelcomeEmailOnSuccessfulRegistration(emailer);
         }
 
         public void execute(String username, String password, String email) {
@@ -111,6 +113,15 @@ public class RegisterUserTest {
         public interface Listener {
             void onSuccess();
             void onFailure();
+        }
+    }
+
+
+    private static class SendWelcomeEmailOnSuccessfulRegistration {
+        private final Emailer emailer;
+
+        public SendWelcomeEmailOnSuccessfulRegistration(Emailer emailer) {
+            this.emailer = emailer;
         }
     }
 
