@@ -16,13 +16,13 @@ class RegisterUser {
             listener.onFailure();
             return;
         }
-        final var user = new RegisterUserTest.User(username, password, email);
+        final var user = new User(username, password, email);
         users.save(user);
         listener.onSuccess(user);
     }
 
     public interface Listener {
-        void onSuccess(RegisterUserTest.User user);
+        void onSuccess(User user);
 
         void onFailure();
     }
