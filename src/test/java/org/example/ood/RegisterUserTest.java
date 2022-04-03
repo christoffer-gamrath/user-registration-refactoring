@@ -110,7 +110,7 @@ public class RegisterUserTest {
             }
             final var user = new User(username, password, email);
             users.save(user);
-            welcomeEmailer.sendWelcomeEmail(user);
+            welcomeEmailer.onSuccess(user);
             listener.onSuccess(user);
         }
 
