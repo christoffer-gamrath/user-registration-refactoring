@@ -76,13 +76,11 @@ public class RegisterUserTest {
 
     private static class RegisterUser {
         private final UserRepository users;
-        private final Emailer emailer;
         private final Listener listener;
         private final SendWelcomeEmailOnSuccessfulRegistration welcomeEmailer;
 
         public RegisterUser(UserRepository users, Emailer emailer, Listener listener) {
             this.users = users;
-            this.emailer = emailer;
             this.listener = listener;
             this.welcomeEmailer = new SendWelcomeEmailOnSuccessfulRegistration(emailer);
         }
