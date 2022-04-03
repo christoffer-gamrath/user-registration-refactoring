@@ -31,6 +31,7 @@ public class RegisterUserTest {
     void givenEmptyUsernameThenRegistrationFails() {
         context.checking(new Expectations() {{
             allowing(users).exists("username"); will(returnValue(false));
+            oneOf(listener).onFailure();
         }});
         assertEquals(false, registerUser.execute("", "securepassword", "user@example.com"));
         assertEquals(false, users.exists("username"));
@@ -40,6 +41,7 @@ public class RegisterUserTest {
     void givenEmptyPasswordThenRegistrationFails() {
         context.checking(new Expectations() {{
             allowing(users).exists("username"); will(returnValue(false));
+            oneOf(listener).onFailure();
         }});
         assertEquals(false, registerUser.execute("username", "", "user@example.com"));
         assertEquals(false, users.exists("username"));
@@ -49,6 +51,7 @@ public class RegisterUserTest {
     void givenTooShortPasswordThenRegistrationFails() {
         context.checking(new Expectations() {{
             allowing(users).exists("username"); will(returnValue(false));
+            oneOf(listener).onFailure();
         }});
         assertEquals(false, registerUser.execute("username", "short", "user@example.com"));
     }
@@ -57,6 +60,7 @@ public class RegisterUserTest {
     void givenEmptyEmailThenRegistrationFails() {
         context.checking(new Expectations() {{
             allowing(users).exists("username"); will(returnValue(false));
+            oneOf(listener).onFailure();
         }});
         assertEquals(false, registerUser.execute("username", "securepassword", ""));
     }
@@ -65,6 +69,7 @@ public class RegisterUserTest {
     void givenUserWithSameUsernameExistsThenRegistrationFails() {
         context.checking(new Expectations() {{
             allowing(users).exists("existinguser"); will(returnValue(true));
+            oneOf(listener).onFailure();
         }});
         assertEquals(false, registerUser.execute("existinguser", "securepassword", "user@example.com"));
     }
@@ -83,12 +88,15 @@ public class RegisterUserTest {
 
         public boolean execute(String username, String password, String email) {
             if ("".equals(username) || "".equals(password) || "".equals(email)) {
+                listener.onFailure();
                 return false;
             }
             if (users.exists(username)) {
+                listener.onFailure();
                 return false;
             }
             if (password.length() < 14) {
+                listener.onFailure();
                 return false;
             }
             users.save(new User(username, password, email));
@@ -99,6 +107,7 @@ public class RegisterUserTest {
 
         public interface Listener {
             void onSuccess();
+            void onFailure();
         }
     }
 
