@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class RegisterUserTest {
     @RegisterExtension
@@ -51,6 +52,15 @@ public class RegisterUserTest {
     }
 
     @Test
+    void emptyUsernameIsInvalid() {
+        context.checking(new Expectations() {{
+            allowing(users).exists("username"); will(returnValue(false));
+        }});
+        final var userValidator = new UserValidator(users);
+        assertFalse(userValidator.isValid("", "securepassword", "user@example.com"));
+    }
+
+    @Test
     void givenEmptyPasswordThenRegistrationFails() {
         context.checking(new Expectations() {{
             allowing(users).exists("username"); will(returnValue(false));
@@ -58,6 +68,15 @@ public class RegisterUserTest {
         }});
         registerUser.execute("username", "", "user@example.com");
         assertEquals(false, users.exists("username"));
+    }
+
+    @Test
+    void emptyPasswordIsInvalid() {
+        context.checking(new Expectations() {{
+            allowing(users).exists("username"); will(returnValue(false));
+        }});
+        final var userValidator = new UserValidator(users);
+        assertFalse(userValidator.isValid("username", "", "user@example.com"));
     }
 
     @Test
@@ -70,6 +89,15 @@ public class RegisterUserTest {
     }
 
     @Test
+    void shortPasswordIsInvalid() {
+        context.checking(new Expectations() {{
+            allowing(users).exists("username"); will(returnValue(false));
+        }});
+        final var userValidator = new UserValidator(users);
+        assertFalse(userValidator.isValid("username", "short", "user@example.com"));
+    }
+
+    @Test
     void givenEmptyEmailThenRegistrationFails() {
         context.checking(new Expectations() {{
             allowing(users).exists("username"); will(returnValue(false));
@@ -79,12 +107,30 @@ public class RegisterUserTest {
     }
 
     @Test
+    void emptyEmailIsInvalid() {
+        context.checking(new Expectations() {{
+            allowing(users).exists("username"); will(returnValue(false));
+        }});
+        final var userValidator = new UserValidator(users);
+        assertFalse(userValidator.isValid("username", "securepassword", ""));
+    }
+
+    @Test
     void givenUserWithSameUsernameExistsThenRegistrationFails() {
         context.checking(new Expectations() {{
             allowing(users).exists("existinguser"); will(returnValue(true));
             oneOf(listener).onFailure();
         }});
         registerUser.execute("existinguser", "securepassword", "user@example.com");
+    }
+
+    @Test
+    void userIsInvalidIfUserWithSameUsernameAlreadyExists() {
+        context.checking(new Expectations() {{
+            allowing(users).exists("existinguser"); will(returnValue(true));
+        }});
+        final var userValidator = new UserValidator(users);
+        assertFalse(userValidator.isValid("existinguser", "securepassword", "user@example.com"));
     }
 
     @Test
