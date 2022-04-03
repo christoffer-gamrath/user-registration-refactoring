@@ -143,7 +143,7 @@ public class RegisterUserTest {
         }
 
         private void sendWelcomeEmail(User user) {
-            emailer.send(user.email, "us@example.org", String.format(welcomeMessage, user.username));
+            emailer.send(user.email(), "us@example.org", String.format(welcomeMessage, user.username()));
         }
 
         @Override
