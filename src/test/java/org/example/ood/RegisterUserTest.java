@@ -111,16 +111,20 @@ public class RegisterUserTest {
         }
 
         public void execute(String username, String password, String email) {
+            var valid = true;
             if ("".equals(username) || "".equals(password) || "".equals(email)) {
                 listener.onFailure();
+                valid = false;
                 return;
             }
             if (users.exists(username)) {
                 listener.onFailure();
+                valid = false;
                 return;
             }
             if (password.length() < 14) {
                 listener.onFailure();
+                valid = false;
                 return;
             }
             final var user = new User(username, password, email);
