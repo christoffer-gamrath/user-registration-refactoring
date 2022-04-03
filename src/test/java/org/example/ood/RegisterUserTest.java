@@ -25,7 +25,6 @@ public class RegisterUserTest {
     @Test
     void givenValidUsernameAndPasswordThenTheUserIsRegisteredAndItSendsTheUserAWelcomeEmail() {
         context.checking(new Expectations() {{
-            allowing(users).exists("username"); will(returnValue(false));
             allowing(userValidator).isValid("username", "securepassword", "user@example.com"); will(returnValue(true));
             final var user = new User("username", "securepassword", "user@example.com");
             oneOf(users).save(user);
