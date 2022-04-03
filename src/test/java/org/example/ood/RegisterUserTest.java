@@ -121,7 +121,7 @@ public class RegisterUserTest {
         }
 
         public void sendWelcomeEmail(String username, String email, User user) {
-            emailer.send(email, "us@example.org", String.format(welcomeMessage, username));
+            emailer.send(user.email, "us@example.org", String.format(welcomeMessage, username));
         }
     }
 
