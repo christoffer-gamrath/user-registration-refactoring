@@ -96,10 +96,7 @@ public class RegisterUserTest {
     public interface UserRepository {
         boolean exists(String username);
 
-        void save(RegisterUserTest.User user);
-    }
-
-    public record User(String username, String password, String email) {
+        void save(User user);
     }
 
     public interface Emailer {
