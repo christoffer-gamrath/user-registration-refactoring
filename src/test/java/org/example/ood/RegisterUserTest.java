@@ -104,10 +104,12 @@ public class RegisterUserTest {
     private static class RegisterUser {
         private final UserRepository users;
         private final Listener listener;
+        private final UserValidator validator;
 
         public RegisterUser(UserRepository users, Listener listener) {
             this.users = users;
             this.listener = listener;
+            this.validator = new UserValidator(users);
         }
 
         public void execute(String username, String password, String email) {
@@ -136,6 +138,14 @@ public class RegisterUserTest {
             void onSuccess(User user);
 
             void onFailure();
+        }
+    }
+
+    private static class UserValidator {
+        private final UserRepository users;
+
+        public UserValidator(UserRepository users) {
+            this.users = users;
         }
     }
 
