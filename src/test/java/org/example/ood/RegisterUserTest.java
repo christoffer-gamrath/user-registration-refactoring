@@ -5,8 +5,6 @@ import org.jmock.junit5.JUnit5Mockery;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
 public class RegisterUserTest {
     @RegisterExtension
     final JUnit5Mockery context = new JUnit5Mockery();
@@ -34,50 +32,5 @@ public class RegisterUserTest {
             oneOf(listener).onFailure();
         }});
         registerUser.execute("a", "b", "c");
-    }
-
-    @Test
-    void emptyUsernameIsInvalid() {
-        context.checking(new Expectations() {{
-            allowing(users).exists("username"); will(returnValue(false));
-        }});
-        final var userValidator = new UserValidatorImpl(users);
-        assertFalse(userValidator.isValid("", "securepassword", "user@example.com"));
-    }
-
-    @Test
-    void emptyPasswordIsInvalid() {
-        context.checking(new Expectations() {{
-            allowing(users).exists("username"); will(returnValue(false));
-        }});
-        final var userValidator = new UserValidatorImpl(users);
-        assertFalse(userValidator.isValid("username", "", "user@example.com"));
-    }
-
-    @Test
-    void shortPasswordIsInvalid() {
-        context.checking(new Expectations() {{
-            allowing(users).exists("username"); will(returnValue(false));
-        }});
-        final var userValidator = new UserValidatorImpl(users);
-        assertFalse(userValidator.isValid("username", "short", "user@example.com"));
-    }
-
-    @Test
-    void emptyEmailIsInvalid() {
-        context.checking(new Expectations() {{
-            allowing(users).exists("username"); will(returnValue(false));
-        }});
-        final var userValidator = new UserValidatorImpl(users);
-        assertFalse(userValidator.isValid("username", "securepassword", ""));
-    }
-
-    @Test
-    void userIsInvalidIfUserWithSameUsernameAlreadyExists() {
-        context.checking(new Expectations() {{
-            allowing(users).exists("existinguser"); will(returnValue(true));
-        }});
-        final var userValidator = new UserValidatorImpl(users);
-        assertFalse(userValidator.isValid("existinguser", "securepassword", "user@example.com"));
     }
 }
