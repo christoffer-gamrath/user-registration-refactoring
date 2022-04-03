@@ -111,6 +111,17 @@ public class RegisterUserTest {
         }
 
         public void execute(String username, String password, String email) {
+            boolean valid = isValid(username, password, email);
+            if (!valid) {
+                listener.onFailure();
+                return;
+            }
+            final var user = new User(username, password, email);
+            users.save(user);
+            listener.onSuccess(user);
+        }
+
+        private boolean isValid(String username, String password, String email) {
             var valid = true;
             if ("".equals(username) || "".equals(password) || "".equals(email)) {
                 valid = false;
@@ -119,13 +130,7 @@ public class RegisterUserTest {
             } else if (password.length() < 14) {
                 valid = false;
             }
-            if (!valid) {
-                listener.onFailure();
-                return;
-            }
-            final var user = new User(username, password, email);
-            users.save(user);
-            listener.onSuccess(user);
+            return valid;
         }
 
         public interface Listener {
