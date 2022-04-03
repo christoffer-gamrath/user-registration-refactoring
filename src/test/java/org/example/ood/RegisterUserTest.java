@@ -93,12 +93,6 @@ public class RegisterUserTest {
         }
     }
 
-    public interface UserRepository {
-        boolean exists(String username);
-
-        void save(User user);
-    }
-
     public interface Emailer {
         void send(String to, String from, String message);
     }
