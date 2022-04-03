@@ -22,6 +22,7 @@ public class RegisterUserTest {
             allowing(users).exists("username"); will(returnValue(false));
             oneOf(users).save(new User("username", "securepassword", "user@example.com"));
             oneOf(emailer).send("user@example.com", "us@example.org", "Welcome, username! Let me explain at length how to get started using this service! ...");
+            oneOf(listener).onSuccess();
         }});
         assertEquals(true, registerUser.execute("username", "securepassword", "user@example.com"));
     }
@@ -92,6 +93,7 @@ public class RegisterUserTest {
             }
             users.save(new User(username, password, email));
             emailer.send(email, "us@example.org", String.format(welcomeMessage, username));
+            listener.onSuccess();
             return true;
         }
 
